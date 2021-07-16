@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="style/main.css" rel="stylesheet">
+    <title>Filter</title>
+</head>
+<body>
+    <div id="mainStyle">
+        <div>
+            <h2>
+                LIGHTNOVELS ACCUMULATORS
+            </h2>
+        </div>
+        <hr/>
+        <div>
+            <input type="text" id="lightnovelName" placeholder="light novel name"/>
+        </div>
+        <div>
+            <input type="number" min="0" id="minChapter" placeholder="min chapter"/>
+            <input type="number" min="0" id="maxChapter" placeholder="min chapter"/>
+        </div>
+        <div id="options">
+            <input type="checkbox" id="addstyle"/>
+            <label for="addstyle">ADD STYLE FILE</label>
+        </div>
+
+        <div>
+            <button id="DownloadChapter">Download This chapter</button>
+        </div>
+        <br/>
+        <button id="startAccumulating">ACCUMULATING</button>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script src="FileSaver.js"></script>
+<!--    "js": ["jquery.min.js","FileSaver.js", "Chapter_Accumulators.js"]-->
+    <script src="popup.js"></script>
+</body>
+</html>
+

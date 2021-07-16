@@ -1,0 +1,76 @@
+* {
+    font-family: chanda,sans-serif;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+#mainStyle {
+    padding: 0px;
+    width: 300px;
+}
+#mainStyle div {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+div#options{
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: start;
+    background-color: #7288b3;
+    padding: 5px;
+}
+input[type=text],input[type=number]{
+    padding: 10px;
+    margin:auto;
+    display: inline;
+    width: 90%;
+    color: grey;
+    outline: none;
+    border-radius: 0;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+input[type=checkbox]{
+    width: 50px;
+    height: 30px;
+    cursor: pointer;
+}
+label {
+    padding: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+}
+#startAccumulating {
+    outline: none;
+    border: 0;
+    color: white;
+    /*background-image: linear-gradient(90deg, #253758, #3a69f5);*/
+    background-color: #253758;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    /*border-radius: 5px;*/
+}
+#DownloadChapter {
+    outline: none;
+    border: 0;
+    color: white;
+    /*background-image: linear-gradient(90deg, #253758, #3a69f5);*/
+    background-color: #4968a0;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+#startAccumulating:active {
+    background-color: #7288b3;
+}
