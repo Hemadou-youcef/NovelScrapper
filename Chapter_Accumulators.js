@@ -52,12 +52,12 @@ $(document).ready(function(){
     var NotFound = []
     var lnname = ''
     var filename = ''
-    var intervallValue = 10
+    var stopLoop = false
 // var FirstElementSearch = '<div class="epcontent entry-content"'
 // var FirstElementSearch = '<div class="text-left"'
-    var ElementClassFind = 'text-left'
+    var ElementClassFind = 'article'
     var Separator = '/'
-    var SubSeparator = 'chapter-'
+    var SubSeparator = ''
     var sitelocation = window.location.href
 
 
@@ -70,33 +70,38 @@ $(document).ready(function(){
 
 
     chrome.runtime.onMessage.addListener(function (request){
-        if(request.solo){
-            $.get( sitelocation.toString(), function( data ) {
-                // let testHTML = $.parseHTML(data)
-                // console.log($(testHTML).find('ol.breadcrumb li:nth-child(3)').text())
+        if(request.stop){
+            stopLoop = true
+        }else{
+            stopLoop = false
+            if(request.solo){
+                $.get( sitelocation.toString(), function( data ) {
+                    // let testHTML = $.parseHTML(data)
+                    // console.log($(testHTML).find('ol.breadcrumb li:nth-child(3)').text())
 
-                let newdata = data.replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
-                newdata = newdata.replaceAll(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
-                let testHTML = $.parseHTML(newdata)
-                newdata = $(testHTML).find('div.' + ElementClassFind).text()
-
-
-                newdata = newdata.replaceAll('<','&lt;')
-                newdata = newdata.replaceAll('>','&gt;')
-
-                newdata = newdata.replaceAll(/\n/g, '<br>')
-                newdata = newdata.replaceAll(/(<br>){2,}/gi, '<br>')
-
-                var navigation = '<div id="navigation"><a href="'+ request.lnname.split(' ').join('_') + '-' + (parseInt(request.min) - 1) +  '.html"><button>السابق</button></a><a href="' + request.lnname.split(' ').join('_') + '-' + (parseInt(request.max) + 1) +  '.html"><button>التالي</button></a></div>'
-                //
-                allcontent = chapteracc + navigation + '<h2 align="center">' + request.lnname + '</h2>' + '<p>' + 'الفصل ' + request.min +  '<p>' + '<p>' +   newdata + '</p>' + navigation + footer
-                var blob = new Blob([allcontent], { type: "text/html;charset=utf-8" });
-                saveAs(blob, request.lnname.split(' ').join('_') + '-' + request.min + ".html");
+                    let newdata = data.replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
+                    newdata = newdata.replaceAll(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
+                    let testHTML = $.parseHTML(newdata)
+                    newdata = $(testHTML).find('div.' + ElementClassFind).text()
 
 
-            });
-        }else {
-            Initialization(request)
+                    newdata = newdata.replaceAll('<','&lt;')
+                    newdata = newdata.replaceAll('>','&gt;')
+
+                    newdata = newdata.replaceAll(/\n/g, '<br>')
+                    newdata = newdata.replaceAll(/(<br>){2,}/gi, '<br>')
+
+                    var navigation = '<div id="navigation"><a href="'+ request.lnname.split(' ').join('_') + '-' + (parseInt(request.min) - 1) +  '.html"><button>السابق</button></a><a href="' + request.lnname.split(' ').join('_') + '-' + (parseInt(request.max) + 1) +  '.html"><button>التالي</button></a></div>'
+                    //
+                    allcontent = chapteracc + navigation + '<h2 align="center">' + request.lnname + '</h2>' + '<p>' + 'الفصل ' + request.min +  '<p>' + '<p>' +   newdata + '</p>' + navigation + footer
+                    var blob = new Blob([allcontent], { type: "text/html;charset=utf-8" });
+                    saveAs(blob, request.lnname.split(' ').join('_') + '-' + request.min + ".html");
+
+
+                });
+            }else {
+                Initialization(request)
+            }
         }
     })
     function Initialization(request){
@@ -122,9 +127,10 @@ $(document).ready(function(){
         }
     }
     async function sync_downloader(tryNumber){
-        let nextChapter = chapterLink + Separator + SubSeparator + min
+        // let nextChapter = chapterLink + Separator + SubSeparator + min
+        let nextChapter = sitelocation
         let oldChapterName = '#'
-        let stopLoop = false
+
         while(!stopLoop){
             try {
                 await $.get(nextChapter, function( data ) {
@@ -133,10 +139,12 @@ $(document).ready(function(){
                     if(linkChecker[linkChecker.length - 1] == ""){
                         linkChecker.pop()
                     }
-                    linkChecker = linkChecker.pop().split("-")
+                    linkChecker = linkChecker.pop().split('-')
                     linkChecker.shift()
+                    linkChecker = linkChecker.join('-').split('.')
+                    linkChecker.pop()
 
-                    console.log(linkChecker.join("-"))
+                    console.log(linkChecker[0])
 
                     let newdata = data.replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
                     newdata = newdata.replaceAll(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
@@ -144,24 +152,31 @@ $(document).ready(function(){
                     let testHTML = $.parseHTML(newdata)
 
                     newdata = $(testHTML).find('div.' + ElementClassFind).text()
-                    nextChapter = $(testHTML).find('div.nav-next a').attr('href')
+                    nextChapter = $(testHTML).find('li.next a').attr('href')
 
-                    if(i = min){
-                        let prevChapter = $(testHTML).find('div.nav-previous  a').attr('href')
+
+                    if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
+                        let prevChapter = $(testHTML).find('li.previous a').attr('href')
                         oldChapterName = prevChapter.split(Separator)
                         if(oldChapterName[oldChapterName.length - 1] == ""){
                             oldChapterName.pop()
                         }
-                        oldChapterName = oldChapterName.pop().split("-")
+                        oldChapterName = oldChapterName.pop().split('-')
                         oldChapterName.shift()
+                        oldChapterName = oldChapterName.join('-').split('.')
+                        oldChapterName.pop()
                         oldChapterName = filename + oldChapterName.join("-") + ".html"
+                    }else if(linkChecker.join("-") == min.toString()){
+                        oldChapterName = '#'
                     }
                     let NextChapterName = nextChapter.split(Separator)
                     if(NextChapterName[NextChapterName.length - 1] == ""){
                         NextChapterName.pop()
                     }
-                    NextChapterName = NextChapterName.pop().split("-")
+                    NextChapterName = NextChapterName.pop().split('-')
                     NextChapterName.shift()
+                    NextChapterName = NextChapterName.join('-').split('.')
+                    NextChapterName.pop()
 
                     newdata = newdata.replaceAll('<','&lt;')
                     newdata = newdata.replaceAll('>','&gt;')
@@ -186,7 +201,7 @@ $(document).ready(function(){
                 // NotFound.push(i)
                 // console.log('error at chapter ' + i)
                 console.log(err)
-                break;
+                stopLoop = true
                 // if(err.status != '404' && tryNumber <= 3){
                 //     unsync_downloader(i,(tryNumber + 1))
                 // }else {
@@ -200,7 +215,7 @@ $(document).ready(function(){
             var blob = new Blob([NotFound.join(',')], { type: "text/css;charset=utf-8" });
             saveAs(blob, "notfound.txt");
         }
-
+        chrome.storage.sync.set({starting: false});
     }
 })
 

@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Accumulator.iml" filepath="$PROJECT_DIR$/.idea/Accumulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/LightNovelReader/.idea/LightNovelReader.iml" filepath="$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/LightNovelReader/.idea/LightNovelReader.iml" />
       <module fileurl="file://$PROJECT_DIR$/../auto_loader_chapter/.idea/auto_loader_chapter.iml" filepath="$PROJECT_DIR$/../auto_loader_chapter/.idea/auto_loader_chapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/first-project/.idea/first-project.iml" filepath="$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/first-project/.idea/first-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/second-project/.idea/second-project.iml" filepath="$PROJECT_DIR$/../../../../../../../xampp/htdocs/Nayta/LARAVEL/second-project/.idea/second-project.iml" />
     </modules>
   </component>
 </project>

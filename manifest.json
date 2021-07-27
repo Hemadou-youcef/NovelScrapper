@@ -3,7 +3,6 @@
   "manifest_version": 3,
   "name": "Light novel downloader",
   "version": "1.0",
-
   "description": "stack all the light novel chapter in one file.",
   "icons": {
     "96": "icons/stack.png"

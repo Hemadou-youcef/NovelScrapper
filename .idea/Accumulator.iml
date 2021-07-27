@@ -5,5 +5,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="auto_loader_chapter" />
+    <orderEntry type="module" module-name="LightNovelReader" />
+    <orderEntry type="module" module-name="first-project" />
+    <orderEntry type="module" module-name="second-project" />
   </component>
 </module>
