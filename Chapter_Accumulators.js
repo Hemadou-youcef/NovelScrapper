@@ -55,7 +55,7 @@ $(document).ready(function(){
     var stopLoop = false
 // var FirstElementSearch = '<div class="epcontent entry-content"'
 // var FirstElementSearch = '<div class="text-left"'
-    var ElementClassFind = 'article'
+    var ElementClassFind = 'chapter-content'
     var Separator = '/'
     var SubSeparator = ''
     var sitelocation = window.location.href
@@ -140,7 +140,9 @@ $(document).ready(function(){
                         linkChecker.pop()
                     }
                     linkChecker = linkChecker.pop().split('-')
-                    linkChecker.shift()
+                    if(linkChecker[0] == 'chapter'){
+                        linkChecker.shift()
+                    }
                     linkChecker = linkChecker.join('-').split('.')
                     linkChecker.pop()
 
@@ -148,21 +150,24 @@ $(document).ready(function(){
 
                     let newdata = data.replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
                     newdata = newdata.replaceAll(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
+                    newdata = newdata.replaceAll('</p>', "\n</p>")
 
                     let testHTML = $.parseHTML(newdata)
 
-                    newdata = $(testHTML).find('div.' + ElementClassFind).text()
-                    nextChapter = $(testHTML).find('li.next a').attr('href')
-
+                    newdata = $(testHTML).find('div#' + ElementClassFind).text()
+                    nextChapter = $(testHTML).find('div.chapter-nav a:last-child').attr('href')
+                    // console.log(nextChapter)
 
                     if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
-                        let prevChapter = $(testHTML).find('li.previous a').attr('href')
+                        let prevChapter = $(testHTML).find('div.chapter-nav a:first-child').attr('href')
                         oldChapterName = prevChapter.split(Separator)
                         if(oldChapterName[oldChapterName.length - 1] == ""){
                             oldChapterName.pop()
                         }
                         oldChapterName = oldChapterName.pop().split('-')
-                        oldChapterName.shift()
+                        if(oldChapterName[0] == 'chapter'){
+                            oldChapterName.shift()
+                        }
                         oldChapterName = oldChapterName.join('-').split('.')
                         oldChapterName.pop()
                         oldChapterName = filename + oldChapterName.join("-") + ".html"
@@ -174,7 +179,9 @@ $(document).ready(function(){
                         NextChapterName.pop()
                     }
                     NextChapterName = NextChapterName.pop().split('-')
-                    NextChapterName.shift()
+                    if(NextChapterName[0] == 'chapter'){
+                        NextChapterName.shift()
+                    }
                     NextChapterName = NextChapterName.join('-').split('.')
                     NextChapterName.pop()
 
@@ -183,7 +190,6 @@ $(document).ready(function(){
 
                     newdata = newdata.replaceAll(/\n/g, '<br>')
                     newdata = newdata.replaceAll(/(<br>){2,}/gi, '<br>')
-
 
                     let navigation = '<div id="navigation"><a href="' + oldChapterName +  '"><button>السابق</button></a><a href="' + filename + NextChapterName.join("-") +  '.html"><button>التالي</button></a></div>'
                     allcontent = chapteracc + navigation + '<h2 align="center">' + lnname + '</h2>' + '<p>' + 'الفصل ' + linkChecker.join("-") +  '<p>' + '<p>' + newdata + '</p>' + navigation + footer
