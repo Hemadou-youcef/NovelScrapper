@@ -55,7 +55,7 @@ $(document).ready(function(){
     var stopLoop = false
 // var FirstElementSearch = '<div class="epcontent entry-content"'
 // var FirstElementSearch = '<div class="text-left"'
-    var ElementClassFind = 'text-left'
+    var ElementClassFind = 'content-story'
     var Separator = '/'
     var SubSeparator = ''
     var sitelocation = window.location.href
@@ -154,14 +154,14 @@ $(document).ready(function(){
 
                     let testHTML = $.parseHTML(newdata)
 
-                    // $(testHTML).find('div.' + ElementClassFind ).remove()
+                    $(testHTML).find('div.' + ElementClassFind + '>p:first-child').remove()
                     newdata = $(testHTML).find('div.' + ElementClassFind).text()
-                    nextChapter = $(testHTML).find('.nav-next >a').attr('href')
+                    nextChapter = $(testHTML).find('.next_sesction >a').attr('href')
                     // console.log(newdata)
                     // console.log(nextChapter)
 
                     if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
-                        let prevChapter = $(testHTML).find('.nav-previous >a').attr('href')
+                        let prevChapter = $(testHTML).find('a.pre').attr('href')
                         oldChapterName = prevChapter.split(Separator)
                         if(oldChapterName[oldChapterName.length - 1] == ""){
                             oldChapterName.pop()
