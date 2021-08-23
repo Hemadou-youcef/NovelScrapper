@@ -53,10 +53,8 @@ $(document).ready(function(){
     var lnname = ''
     var filename = ''
     var stopLoop = false
-// var FirstElementSearch = '<div class="epcontent entry-content"'
-// var FirstElementSearch = '<div class="text-left"'
-    var ElementClassFind = 'desc'
-    var Separator = '/'
+    var ElementClassFind = 'epcontent'
+    var Separator = '-'
     var SubSeparator = ''
     var sitelocation = window.location.href
 
@@ -135,14 +133,13 @@ $(document).ready(function(){
             try {
                 await $.get(nextChapter, function( data ) {
 
-                    let linkChecker = nextChapter.split(Separator)
+                    let linkChecker = nextChapter.split('/')
                     if(linkChecker[linkChecker.length - 1] == ""){
                         linkChecker.pop()
                     }
-                    linkChecker = linkChecker.pop().split('-')
-                    if(linkChecker[0] == 'chapter'){
-                        linkChecker.shift()
-                    }
+                    linkChecker = linkChecker.pop().split(Separator).filter(function (value){
+                        return !isNaN(value)
+                    })
                     // linkChecker = linkChecker.join('-').split('.')
                     // linkChecker.pop()
 
@@ -154,16 +151,15 @@ $(document).ready(function(){
 
                     let testHTML = $.parseHTML(newdata)
 
-                    $(testHTML).find('div.' + ElementClassFind + '>center').remove()
                     $(testHTML).find('div.' + ElementClassFind + '>div').remove()
                     newdata = $(testHTML).find('div.' + ElementClassFind).text()
-                    
-                    nextChapter = $(testHTML).find('.chapter-actions >li:last-child a').attr('href')
+
+                    nextChapter = $(testHTML).find('.naveps .nvs:last-child >a').attr('href')
                     // console.log(newdata)
                     // console.log(nextChapter)
 
                     if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
-                        let prevChapter = $(testHTML).find('.chapter-actions >li:first-child a').attr('href')
+                        let prevChapter = $(testHTML).find('.naveps .nvs:first-child >a').attr('href')
                         oldChapterName = prevChapter.split(Separator)
                         if(oldChapterName[oldChapterName.length - 1] == ""){
                             oldChapterName.pop()
