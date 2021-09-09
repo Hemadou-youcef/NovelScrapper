@@ -53,7 +53,7 @@ $(document).ready(function(){
     var lnname = ''
     var filename = ''
     var stopLoop = false
-    var ElementClassFind = 'epcontent'
+    var ElementClassFind = 'shortstory'
     var Separator = '-'
     var SubSeparator = ''
     var sitelocation = window.location.href
@@ -133,85 +133,99 @@ $(document).ready(function(){
             try {
                 await $.get(nextChapter, function( data ) {
 
-                    let linkChecker = nextChapter.split('/')
-                    if(linkChecker[linkChecker.length - 1] == ""){
-                        linkChecker.pop()
-                    }
-                    linkChecker = linkChecker.pop().split(Separator).filter(function (value){
-                        return !isNaN(value)
-                    })
+                    // let linkChecker = nextChapter.split('/')
+                    // if(linkChecker[linkChecker.length - 1] == ""){
+                    //     linkChecker.pop()
+                    // }
+                    // linkChecker = linkChecker.pop().split(Separator).filter(function (value){
+                    //     return !isNaN(value)
+                    // })
                     // linkChecker = linkChecker.join('-').split('.')
                     // linkChecker.pop()
 
-                    console.log(linkChecker.join("-"))
+
 
                     let newdata = data.replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
                     newdata = newdata.replaceAll(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
-                    newdata = newdata.replaceAll('<br>', "\n")
+                    newdata = newdata.replaceAll("</p><p>","||YDLNEWLINE||</p><p>")
+                    // console.log(newdata)
 
                     let testHTML = $.parseHTML(newdata)
 
-                    $(testHTML).find('div.' + ElementClassFind + '>div').remove()
+                    let linkChecker = $(testHTML).find('h1.title').text().split('|')
+                    // linkChecker = linkChecker.shift().replaceAll(':','')
+                    linkChecker = linkChecker.shift().split('').filter(function (value){
+                        if (/[0-9]/.test(value) || /[a-zA-Z]/.test(value) || value == ' '){
+                            return true
+                        }else
+                        return false
+                    })
+                    linkChecker = linkChecker.join("")
+                    linkChecker = linkChecker.split(' ')
+                    console.log(linkChecker.join("-"))
+
+                    $(testHTML).find('div.' + ElementClassFind + '>div:last-child').remove()
                     newdata = $(testHTML).find('div.' + ElementClassFind).text()
+                    newdata = newdata.replaceAll("||YDLNEWLINE||","</br>")
 
-                    nextChapter = $(testHTML).find('.naveps .nvs:last-child >a').attr('href')
+                    nextChapter = $(testHTML).find('#next ').attr('href')
                     // console.log(newdata)
-                    // console.log(nextChapter)
+                    console.log(nextChapter)
 
-                    if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
-                        let prevChapter = $(testHTML).find('.naveps .nvs:first-child >a').attr('href')
-                        oldChapterName = prevChapter.split(Separator)
-                        if(oldChapterName[oldChapterName.length - 1] == ""){
-                            oldChapterName.pop()
-                        }
-                        oldChapterName = oldChapterName.pop().split('-')
-                        if(oldChapterName[0] == 'chapter'){
-                            oldChapterName.shift()
-                        }
-                        // oldChapterName = oldChapterName.join('-').split('.')
-                        // oldChapterName.pop()
-
-                        // if(oldChapterName[1] != 'chapter'){
-                        //     oldChapterName.shift()
-                        // }
-                        // oldChapterName.shift()
-                        // oldChapterName.shift()
-
-                        oldChapterName = filename + oldChapterName.join("-") + ".html"
-                    }else if(linkChecker.join("-") == min.toString()){
-                        oldChapterName = '#'
-                    }
-                    let NextChapterName = nextChapter.split(Separator)
-                    if(NextChapterName[NextChapterName.length - 1] == ""){
-                        NextChapterName.pop()
-                    }
-                    NextChapterName = NextChapterName.pop().split('-')
-                    if(NextChapterName[0] == 'chapter'){
-                        NextChapterName.shift()
-                    }
-                    // NextChapterName = NextChapterName.join('-').split('.')
-                    // NextChapterName.pop()
-
-                    newdata = newdata.replaceAll('<','&lt;')
-                    newdata = newdata.replaceAll('>','&gt;')
-
-                    newdata = newdata.replaceAll(/\n/g, '<br>')
-                    newdata = newdata.replaceAll(/(<br>){2,}/gi, '<br>')
-
-                    // if(linkChecker[1] != 'chapter'){
-                    //     linkChecker.shift()
-                    // }
-                    // linkChecker.shift()
-                    // linkChecker.shift()
+                    // if(linkChecker.join("-") == min.toString() && linkChecker.join("-") != "1"){
+                    //     let prevChapter = $(testHTML).find('#prev').attr('href')
+                    //     oldChapterName = prevChapter.split(Separator)
+                    //     if(oldChapterName[oldChapterName.length - 1] == ""){
+                    //         oldChapterName.pop()
+                    //     }
+                    //     oldChapterName = oldChapterName.pop().split('-')
+                    //     if(oldChapterName[0] == 'chapter'){
+                    //         oldChapterName.shift()
+                    //     }
+                    //     // oldChapterName = oldChapterName.join('-').split('.')
+                    //     // oldChapterName.pop()
                     //
-                    // if(NextChapterName[1] != 'chapter'){
+                    //     // if(oldChapterName[1] != 'chapter'){
+                    //     //     oldChapterName.shift()
+                    //     // }
+                    //     // oldChapterName.shift()
+                    //     // oldChapterName.shift()
+                    //
+                    //     oldChapterName = filename + oldChapterName.join("-") + ".html"
+                    // }else if(linkChecker.join("-") == min.toString()){
+                    //     oldChapterName = '#'
+                    // }
+                    // let NextChapterName = nextChapter.split(Separator)
+                    // if(NextChapterName[NextChapterName.length - 1] == ""){
+                    //     NextChapterName.pop()
+                    // }
+                    // NextChapterName = NextChapterName.pop().split('-')
+                    // if(NextChapterName[0] == 'chapter'){
                     //     NextChapterName.shift()
                     // }
-                    // NextChapterName.shift()
-                    // NextChapterName.shift()
+                    // // NextChapterName = NextChapterName.join('-').split('.')
+                    // // NextChapterName.pop()
+                    //
+                    // newdata = newdata.replaceAll('<','&lt;')
+                    // newdata = newdata.replaceAll('>','&gt;')
+                    //
+                    // newdata = newdata.replaceAll(/\n/g, '<br>')
+                    // newdata = newdata.replaceAll(/(<br>){2,}/gi, '<br>')
+                    //
+                    // // if(linkChecker[1] != 'chapter'){
+                    // //     linkChecker.shift()
+                    // // }
+                    // // linkChecker.shift()
+                    // // linkChecker.shift()
+                    // //
+                    // // if(NextChapterName[1] != 'chapter'){
+                    // //     NextChapterName.shift()
+                    // // }
+                    // // NextChapterName.shift()
+                    // // NextChapterName.shift()
 
 
-                    let navigation = '<div id="navigation"><a href="' + oldChapterName +  '"><button>السابق</button></a><a href="' + filename + NextChapterName.join("-") +  '.html"><button>التالي</button></a></div>'
+                    let navigation = '<div id="navigation"><a href="#"><button>السابق</button></a><a href="#"><button>التالي</button></a></div>'
                     allcontent = chapteracc + navigation + '<h2 align="center">' + lnname + '</h2>' + '<p>' + 'الفصل ' + linkChecker.join("-") +  '<p>' + '<p>' + newdata + '</p>' + navigation + footer
 
                     let blob = new Blob([allcontent], { type: "text/html;charset=utf-8" });
